@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro CIC — CEM Esquina</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cem-blue: #0e5a9e;
+      --cem-ocre: #b8863d;
+      --cem-paper: #f8f5ee;
+      --cem-border: #d4cfc4;
+      --cem-text: #1a1a1a;
+      --cem-muted: #6b6560;
+      --cem-card: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #eeebe3;
+      font-family: 'IBM Plex Sans', sans-serif;
+      color: var(--cem-text);
+      font-size: 14px;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    /* ---- HEADER INSTITUCIONAL ---- */
+    .inst-header {
+      background: var(--cem-blue);
+      border-radius: 8px 8px 0 0;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .inst-header .left h1 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.01em;
+    }
+    .inst-header .left h2 {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+    .inst-header .right {
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+      text-align: right;
+      line-height: 1.5;
+    }
+    .inst-header .right strong {
+      color: #fff;
+      font-weight: 500;
+    }
+    /* ---- FORM BODY ---- */
+    .form-body {
+      background: var(--cem-paper);
+      border: 1px solid var(--cem-border);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      padding: 1.5rem;
+    }
+    .scard {
+      background: var(--cem-card);
+      border: 1px solid var(--cem-border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .stitle {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--cem-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--cem-border);
+    }
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+    .g4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem; }
+    .f { display: flex; flex-direction: column; gap: 3px; }
+    label.lbl { font-size: 11px; color: var(--cem-muted); font-weight: 500; }
+    input[type=text],
+    input[type=date],
+    input[type=tel],
+    input[type=number],
+    select,
+    textarea {
+      border: 1px solid var(--cem-border);
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-size: 13px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: #fff;
+      color: var(--cem-text);
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--cem-blue);
+      box-shadow: 0 0 0 2px rgba(14,90,158,0.08);
+    }
+    /* ---- PACIENTE CARD ---- */
+    .pac-card {
+      background: var(--cem-paper);
+      border: 1px solid var(--cem-border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .pac-hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .pac-num {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--cem-blue);
+      background: #e8f0f8;
+      padding: 2px 10px;
+      border-radius: 4px;
+    }
+    .rm-btn {
+      background: none;
+      border: 1px solid #d4a0a0;
+      color: #a33;
+      border-radius: 4px;
+      font-size: 11px;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+    .rm-btn:hover { background: #fde8e8; }
+    .divider { border: none; border-top: 1px solid var(--cem-border); margin: 0.75rem 0; }
+    /* turno toggle */
+    .tg { display: flex; gap: 0.5rem; }
+    .tg-btn {
+      border: 1px solid var(--cem-border);
+      background: #fff;
+      border-radius: 4px;
+      padding: 5px 14px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: 'IBM Plex Sans', sans-serif;
+      color: var(--cem-muted);
+      transition: all 0.12s;
+    }
+    .tg-btn.on { background: var(--cem-blue); color: #fff; border-color: var(--cem-blue); }
+    /* reportables */
+    .rep-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.4rem 0.6rem;
+      margin-top: 0.4rem;
+    }
+    .ci { display: flex; align-items: flex-start; gap: 5px; font-size: 12px; line-height: 1.4; }
+    .ci input[type=checkbox] { width: 13px; height: 13px; accent-color: var(--cem-blue); flex-shrink: 0; margin-top: 1px; }
+    .otra-wrap { display: none; margin-top: 4px; }
+    .otra-wrap input { font-size: 12px; padding: 4px 7px; }
+    .cron-chk { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-top: 8px; }
+    .cron-chk input[type=checkbox] { width: 13px; height: 13px; accent-color: var(--cem-ocre); }
+    /* botones principales */
+    .add-btn {
+      background: none;
+      border: 1px solid var(--cem-blue);
+      color: var(--cem-blue);
+      border-radius: 6px;
+      padding: 7px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 500;
+    }
+    .add-btn:hover { background: #e8f0f8; }
+    .send-btn {
+      background: var(--cem-blue);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 11px 24px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 0.5rem;
+      transition: background 0.15s;
+    }
+    .send-btn:hover { background: #0a4d8a; }
+    .send-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    /* resultado */
+    .result-ok {
+      display: none;
+      margin-top: 0.75rem;
+      background: #e8f4ec;
+      border: 1px solid #a3cdb0;
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      font-size: 13px;
+      color: #1a4a28;
+    }
+    /* toast */
+    .toast {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a3a1a;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 13px;
+      z-index: 999;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .toast.err { background: #4a1a1a; }
+    /* responsive */
+    @media (max-width: 640px) {
+      .g2, .g3, .g4 { grid-template-columns: 1fr; }
+      .rep-grid { grid-template-columns: repeat(2, 1fr); }
+      .inst-header { flex-direction: column; gap: 0.5rem; }
+      .inst-header .right { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <div class="inst-header">
+    <div class="left">
+      <h1>Centro Integrador Comunitario</h1>
+      <h2>Registro digital de atención — CEM Esquina</h2>
+    </div>
+    <div class="right">
+      <strong>Municipio de Esquina</strong><br>
+      Secretaría de Planificación Estratégica
+    </div>
+  </div>
+
+  <div class="form-body">
+
+    <div class="scard">
+      <div class="stitle">Datos del profesional y sesión</div>
+      <div class="g3">
+        <div class="f">
+          <label class="lbl">Médico/a</label>
+          <input type="text" id="medico" placeholder="Nombre completo">
+        </div>
+        <div class="f">
+          <label class="lbl">Especialidad</label>
+          <input type="text" id="especialidad" placeholder="Ej: Cardiología">
+        </div>
+        <div class="f">
+          <label class="lbl">Fecha</label>
+          <input type="date" id="fecha">
+        </div>
+      </div>
+    </div>
+
+    <div class="scard">
+      <div class="stitle">Pacientes atendidos</div>
+      <div id="pac-cont"></div>
+      <button class="add-btn" onclick="addPac()">+ Agregar paciente</button>
+    </div>
+
+    <button class="send-btn" id="send-btn" onclick="enviar()">Enviar a Google Sheets</button>
+    <div class="result-ok" id="result-msg"></div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const APPS_URL = 'https://script.google.com/macros/s/AKfycbyeFF9LR_XvL87RyD0-bxSp0cQx3xfUyXyJfaWevyq719tuU0Jkx6d3aMv3xCU0uGe5mA/exec';
+
+  const REPORTABLES = [
+    { label: 'Hipertensión',  esp: false },
+    { label: 'Diabetes',      esp: false },
+    { label: 'Obesidad',      esp: false },
+    { label: 'EPOC',          esp: false },
+    { label: 'Asma',          esp: false },
+    { label: 'Cardiopatía',   esp: false },
+    { label: 'Embarazo',      esp: false },
+    { label: 'TBC',           esp: false },
+    { label: 'VIH',           esp: false },
+    { label: 'Chagas',        esp: false },
+    { label: 'Dengue',        esp: false },
+    { label: 'COVID-19',      esp: false },
+    { label: 'Anemia',        esp: false },
+    { label: 'Desnutrición',  esp: false },
+    { label: 'Salud mental',  esp: true  },
+    { label: 'Otra',          esp: true  },
+  ];
+
+  let pCount = 0;
+
+  function buildRepGrid(n) {
+    return REPORTABLES.map((r, i) => {
+      const espField = r.esp
+        ? `<div class="otra-wrap" id="wrap-${n}-${i}">
+             <input type="text" id="esp-${n}-${i}" placeholder="Especificá…">
+           </div>`
+        : '';
+      return `
+        <div>
+          <label class="ci">
+            <input type="checkbox" id="rep-${n}-${i}" value="${r.label}" onchange="toggleEsp(${n},${i})">
+            ${r.label}
+          </label>
+          ${espField}
+        </div>`;
+    }).join('');
+  }
+
+  function toggleEsp(n, i) {
+    const chk  = document.getElementById(`rep-${n}-${i}`);
+    const wrap = document.getElementById(`wrap-${n}-${i}`);
+    if (!wrap) return;
+    wrap.style.display = chk.checked ? 'block' : 'none';
+    if (!chk.checked) {
+      const inp = document.getElementById(`esp-${n}-${i}`);
+      if (inp) inp.value = '';
+    }
+  }
+
+  function addPac() {
+    pCount++;
+    const n = pCount;
+    const d = document.createElement('div');
+    d.id = 'p' + n;
+    d.className = 'pac-card';
+    d.innerHTML = `
+      <div class="pac-hdr">
+        <span class="pac-num">Paciente ${n}</span>
+        ${n > 1 ? `<button class="rm-btn" onclick="rmPac(${n})">Eliminar</button>` : ''}
+      </div>
+      <div class="g4" style="margin-bottom:0.75rem">
+        <div class="f"><label class="lbl">DNI</label><input type="text" id="dni-${n}" placeholder="Nº documento"></div>
+        <div class="f"><label class="lbl">Apellido y nombre</label><input type="text" id="nom-${n}" placeholder="Apellido, Nombre"></div>
+        <div class="f"><label class="lbl">Tutor/a</label><input type="text" id="tut-${n}" placeholder="—"></div>
+        <div class="f"><label class="lbl">Teléfono</label><input type="tel" id="tel-${n}" placeholder="—"></div>
+      </div>
+      <div class="g4" style="margin-bottom:0.75rem">
+        <div class="f"><label class="lbl">Fecha de nacimiento</label><input type="date" id="fn-${n}"></div>
+        <div class="f"><label class="lbl">Edad</label><input type="number" id="edad-${n}" min="0" max="120" placeholder="años"></div>
+        <div class="f"><label class="lbl">Domicilio</label><input type="text" id="dom-${n}" placeholder="Calle y número"></div>
+        <div class="f"><label class="lbl">Barrio</label><input type="text" id="barrio-${n}" placeholder="—"></div>
+      </div>
+      <hr class="divider">
+      <div class="g2" style="margin-bottom:0.6rem;border-left:3px solid #b8863d;padding-left:0.75rem">
+        <div class="f"><label class="lbl">Diagnóstico</label><input type="text" id="diag-${n}" placeholder="Ej: HTA"></div>
+        <div class="f"><label class="lbl">Observaciones</label><input type="text" id="obs-${n}" placeholder="—"></div>
+      </div>
+      <hr class="divider">
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start">
+        <div>
+          <div style="font-size:11px;color:#6b6560;margin-bottom:5px">Turno</div>
+          <div class="tg" id="tg-${n}">
+            <button class="tg-btn" onclick="setTurno(${n},'AM')">AM</button>
+            <button class="tg-btn" onclick="setTurno(${n},'PM')">PM</button>
+          </div>
+          <input type="hidden" id="turno-${n}" value="">
+        </div>
+        <div style="flex:1;min-width:220px">
+          <div style="font-size:11px;color:#6b6560;margin-bottom:4px">Datos reportables</div>
+          <div class="rep-grid">${buildRepGrid(n)}</div>
+          <label class="cron-chk">
+            <input type="checkbox" id="cron-${n}">
+            Condición crónica
+          </label>
+        </div>
+      </div>
+    `;
+    document.getElementById('pac-cont').appendChild(d);
+  }
+
+  function setTurno(n, val) {
+    document.getElementById('turno-' + n).value = val;
+    document.querySelectorAll('#tg-' + n + ' .tg-btn')
+      .forEach(b => b.classList.toggle('on', b.textContent === val));
+  }
+
+  function rmPac(n) {
+    const el = document.getElementById('p' + n);
+    if (el) el.remove();
+  }
+
+  function showToast(msg, err = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (err ? ' err' : '');
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3500);
+  }
+
+  function getReportables(n) {
+    return REPORTABLES.map((r, i) => {
+      const chk = document.getElementById(`rep-${n}-${i}`);
+      if (!chk || !chk.checked) return null;
+      if (r.esp) {
+        const txt = document.getElementById(`esp-${n}-${i}`)?.value.trim();
+        return txt ? `${r.label}: ${txt}` : r.label;
+      }
+      return r.label;
+    }).filter(Boolean).join(', ');
+  }
+
+  async function enviar() {
+    const medico = document.getElementById('medico').value.trim();
+    const fecha  = document.getElementById('fecha').value;
+    if (!medico || !fecha) {
+      showToast('Completá médico/a y fecha', true);
+      return;
+    }
+
+    const filas = [];
+    for (let i = 1; i <= pCount; i++) {
+      if (!document.getElementById('p' + i)) continue;
+      const dni = document.getElementById('dni-' + i)?.value.trim();
+      const nom = document.getElementById('nom-' + i)?.value.trim();
+      if (!dni && !nom) continue;
+      filas.push({
+        timestamp:        new Date().toISOString(),
+        fecha,
+        medico,
+        especialidad:     document.getElementById('especialidad').value.trim(),
+        dni,
+        nombre:           nom,
+        tutor:            document.getElementById('tut-'    + i)?.value.trim() || '',
+        telefono:         document.getElementById('tel-'    + i)?.value.trim() || '',
+        fecha_nacimiento: document.getElementById('fn-'     + i)?.value        || '',
+        edad:             document.getElementById('edad-'   + i)?.value        || '',
+        domicilio:        document.getElementById('dom-'    + i)?.value.trim() || '',
+        barrio:           document.getElementById('barrio-' + i)?.value.trim() || '',
+        diagnostico:      document.getElementById('diag-'   + i)?.value.trim() || '',
+        observaciones:    document.getElementById('obs-'    + i)?.value.trim() || '',
+        turno:            document.getElementById('turno-'  + i)?.value        || '',
+        reportables:      getReportables(i),
+        cronico:          document.getElementById('cron-'   + i)?.checked ? 'Sí' : 'No'
+      });
+    }
+
+    if (!filas.length) {
+      showToast('No hay pacientes con datos para enviar', true);
+      return;
+    }
+
+    const btn = document.getElementById('send-btn');
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+
+    try {
+      const res  = await fetch(APPS_URL, {
+        method: 'POST',
+        body: JSON.stringify({ filas }),
+        headers: { 'Content-Type': 'text/plain' }
+      });
+      const json = await res.json();
+      if (json.status === 'ok') {
+        showToast(`✓ ${filas.length} paciente(s) guardado(s) en Sheets`);
+        const rm = document.getElementById('result-msg');
+        rm.style.display = 'block';
+        rm.innerHTML = `<strong>Enviado correctamente</strong> — ${filas.length} fila(s) registradas.<br>
+          Médico/a: ${medico} &nbsp;·&nbsp; Fecha: ${fecha}`;
+      } else {
+        showToast('Error: ' + (json.message || 'sin detalle'), true);
+      }
+    } catch (e) {
+      showToast('No se pudo conectar con el servidor', true);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Enviar a Google Sheets';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
+    addPac();
+  });
+</script>
+</body>
+</html>
